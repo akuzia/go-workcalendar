@@ -1,6 +1,6 @@
 module github.com/akuzia/go-workcalendar/v1
 
-go 1.21
+go 1.20
 
 require github.com/stretchr/testify v1.9.0
 
