@@ -52,6 +52,14 @@ func NewWorkCalendar(code string) (*WorkCalendar, error) {
 	}, nil
 }
 
+func (c *WorkCalendar) AddDayOff(t time.Time) {
+	c.cal[listKey(t)] = dayFromTime(t, true)
+}
+
+func (c *WorkCalendar) AddWorkDay(t time.Time) {
+	c.cal[listKey(t)] = dayFromTime(t, false)
+}
+
 func (c WorkCalendar) IsWorkday(t time.Time) bool {
 	return !c.IsDayOff(t)
 }

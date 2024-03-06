@@ -61,5 +61,52 @@ func TestWorkCalendar__ListDays(t *testing.T) {
 		time.Date(2024, 1, 9, 0, 0, 0, 0, time.UTC),
 		time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC),
 	}, workdays)
+}
 
+func TestWorkCalendar__CalendarModification(t *testing.T) {
+	wc, err := workcalendar.NewWorkCalendar("ru")
+	require.NoError(t, err)
+
+	holidays, err := wc.ListHolidays(
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	)
+	require.NoError(t, err)
+	assert.Equal(t, []time.Time{
+		time.Date(2024, 2, 23, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 24, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	}, holidays)
+
+	workdays, err := wc.ListWorkdays(
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	)
+	require.NoError(t, err)
+	assert.Equal(t, []time.Time{
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+	}, workdays)
+
+	wc.AddWorkDay(time.Date(2024, 2, 24, 0, 0, 0, 0, time.UTC))
+	wc.AddDayOff(time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC))
+
+	holidays, err = wc.ListHolidays(
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	)
+	require.NoError(t, err)
+	assert.Equal(t, []time.Time{
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 23, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	}, holidays)
+
+	workdays, err = wc.ListWorkdays(
+		time.Date(2024, 2, 22, 0, 0, 0, 0, time.UTC),
+		time.Date(2024, 2, 25, 0, 0, 0, 0, time.UTC),
+	)
+	require.NoError(t, err)
+	assert.Equal(t, []time.Time{
+		time.Date(2024, 2, 24, 0, 0, 0, 0, time.UTC),
+	}, workdays)
 }
