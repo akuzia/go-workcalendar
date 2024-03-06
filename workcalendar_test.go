@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/akuzia/workcalendar"
-	"github.com/akuzia/workcalendar/providers"
+	"github.com/retailcrm/workcalendar"
+	"github.com/retailcrm/workcalendar/providers"
 )
 
 func TestWorkCalendar__SingleDayCheck(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/akuzia/workcalendar/providers"
+	"github.com/retailcrm/workcalendar/providers"
 )
 
 var ErrStartDateAfterEnd = errors.New("from start date is after finish date")
