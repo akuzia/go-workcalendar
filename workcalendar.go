@@ -1,16 +1,13 @@
 package workcalendar
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
-	"io"
-	"os"
 	"time"
+
+	"github.com/akuzia/workcalendar/providers"
 )
 
 var ErrStartDateAfterEnd = errors.New("from start date is after finish date")
-var ErrCodeDoesNotExist = errors.New("provided code does not exist")
 
 type HolidayListSchema struct {
 	DayOff  []string `json:"dayoff"`
@@ -18,40 +15,18 @@ type HolidayListSchema struct {
 }
 
 func loadProviderDates(code string) ([]day, error) {
-	f, err := os.Open(fmt.Sprintf("./assets/%s.json", code))
-	if errors.Is(err, os.ErrNotExist) {
-		return nil, ErrCodeDoesNotExist
-	} else if err != nil {
-		return nil, err
-	}
-
-	b, err := io.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-
-	s := HolidayListSchema{}
-	if err := json.Unmarshal(b, &s); err != nil {
-		return nil, err
-	}
-
 	days := []day{}
-	for _, d := range s.DayOff {
-		t, err := time.Parse("20060102", d)
-		if err != nil {
-			return nil, err
-		}
+	provider, err := providers.GetProvider(code)
+	if err != nil {
+		return days, err
+	}
 
+	for _, t := range provider.DaysOff {
 		days = append(days, dayFromTime(t, true))
 	}
 
-	for _, d := range s.WorkDay {
-		t, err := time.Parse("20060102", d)
-		if err != nil {
-			return nil, err
-		}
-
-		days = append(days, dayFromTime(t, true))
+	for _, t := range provider.WorkDays {
+		days = append(days, dayFromTime(t, false))
 	}
 
 	return days, nil

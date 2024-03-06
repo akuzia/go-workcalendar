@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/akuzia/workcalendar"
+	"github.com/akuzia/workcalendar/providers"
 )
 
 func TestWorkCalendar__SingleDayCheck(t *testing.T) {
@@ -26,7 +27,7 @@ func TestWorkCalendar__SingleDayCheck(t *testing.T) {
 
 func TestWorkCalendar__WrongCode(t *testing.T) {
 	_, err := workcalendar.NewWorkCalendar("oops")
-	require.Equal(t, err, workcalendar.ErrCodeDoesNotExist)
+	require.Equal(t, err, providers.ErrCodeDoesNotExist)
 }
 
 func TestWorkCalendar__ListDays(t *testing.T) {
