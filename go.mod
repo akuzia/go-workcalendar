@@ -1,4 +1,4 @@
-module github.com/akuzia/workcalendar
+module github.com/retailcrm/workcalendar
 
 go 1.20
 
